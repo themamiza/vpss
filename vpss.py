@@ -12,8 +12,7 @@ def print_menu() -> None:
 2) Remove user
 3) Change user expiry
 4) Change user max connections
-5) Limiter
-6) Live monitor
+5) Live monitor
 0) Exit (Ctrl-C at any point to exit)
 
 """)
