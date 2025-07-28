@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from user import add_user, validate_username, user_exists, remove_user, set_max_connections
+from user import add_user, validate_username, user_exists, remove_user, set_max_connections, set_user_expiry
 from utils import validate_and_format_fixed_date, calc_relative_expiry_date, clear_screen
 from live_monitor import live_monitor
 
@@ -125,6 +125,8 @@ def handle_change_exipry() -> None:
     else:
         print("Invalid choice.")
         return
+
+    set_user_expiry(username, expiry)   
 
 def handle_change_max_connections() -> None:
     username = input("Enter new username: ")

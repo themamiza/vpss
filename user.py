@@ -108,3 +108,22 @@ def get_user_expiry(username: str):
     parsed_expiry_str = datetime.strptime(expiry_str, "%b %d, %Y")
     return parsed_expiry_str.strftime("%Y-%m-%d")
 
+def set_user_expiry(username: str, expiry: str):
+    users = load_users()
+    if not validate_username(username):
+        raise ValueError(f"'{username}' is not a valid username.")
+
+    if not user_exists(username):
+        raise ValueError(f"'{username}' does not exist on the system.")
+
+    done = False
+    for user in users:
+        if user["username"] == username
+            subprocess.run(["chage", "-E", expiry, username], capture_output=True, check=True)
+            user["expiry"] = expiry
+            done = True
+            break
+
+    if not done:
+        raise ValueError(f"'{username}' not found in '{USERS_FILE}'.")
+    save_users(users)
