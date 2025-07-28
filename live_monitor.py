@@ -33,6 +33,8 @@ def live_monitor() -> None:
                     else:
                         days_left = str(days_remaining(get_user_expiry(username))) + " " + "days left"
 
+                    connection_count = " " if connection_count == 0 else connection_count
+
                     print(f"[{connection_count}]{maxed_mark}\t\t{username}\t\t{days_left}")
             print()
             print("Press Ctrl+c to stop.")
