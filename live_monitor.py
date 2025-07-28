@@ -5,6 +5,9 @@ from utils import days_remaining, clear_screen
 from user import load_users, USERS_FILE, get_user_expiry
 from ssh_control import count_connections, kill_excess_connections
 
+# How often should the monitor run (seconds)
+update_interval = 3
+
 def live_monitor() -> None:
     try:
         while True:
@@ -33,7 +36,7 @@ def live_monitor() -> None:
                     print(f"[{connection_count}]{maxed_mark}\t\t{username}\t\t{days_left}")
             print()
             print("Press Ctrl+c to stop.")
-            sleep(1)
+            sleep(update_interval)
     except KeyboardInterrupt:
         print("\nExiting live monitor.")
 
