@@ -118,7 +118,7 @@ def set_user_expiry(username: str, expiry: str):
 
     done = False
     for user in users:
-        if user["username"] == username
+        if user["username"] == username:
             subprocess.run(["chage", "-E", expiry, username], capture_output=True, check=True)
             user["expiry"] = expiry
             done = True
