@@ -22,7 +22,7 @@ def live_monitor() -> None:
                     connection_count = count_connections(username)
                     maxed_mark = "*" if max_connections == connection_count else " "
 
-                    if connection_count > count_connections:
+                    if connection_count > max_connections:
                         kill_excess_connections(username, max_connections)
 
                     if get_user_expiry(username) == "never":
