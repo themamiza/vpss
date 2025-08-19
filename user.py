@@ -127,3 +127,48 @@ def set_user_expiry(username: str, expiry: str):
     if not done:
         raise ValueError(f"'{username}' not found in '{USERS_FILE}'.")
     save_users(users)
+
+def resurrect_users() -> dict:
+    """
+    Recreate all users from a carried users.json file.
+    Always (re)apply password, expiry, and max_connections.
+    Returns a summary dict with 'created', 'updated', 'errors'.
+    """
+    summary = {"created": [], "updated": [], "errors": []}
+    try:
+        users = load_users()
+    except Exception as e:
+        summary["errors"].append(f"Failed to load {USERS_FILE}: {e}")
+        return summary
+
+    for user in users if isinstance(users, list) else []:
+        try:
+            username = (user.get("username") or "").strip()
+            password = user.get("password")
+            expiry   = user.get("expiry")
+            max_conn = user.get("max_connections")
+
+            if not user_exists(username):
+                add_user(username=username, expiry=expiry, max_connections=max_conn)
+                action = "created"
+            else:
+                action = "updated"
+                if expiry is not None:
+                    set_user_expiry(username, expiry)
+                if max_conn is not None:
+                    set_max_connections(username, max_conn)
+
+            if password:
+                subprocess.run(
+                    ["chpasswd"],
+                    input=f"{username}:{password}".encode("utf-8"),
+                    check=True,
+                )
+
+            summary[action].append(username)
+        except subprocess.CalledProcessError as e:
+            summary["errors"].append({"user": user.get("username"), "error": f"chpasswd failed: {e}"})
+        except Exception as e:
+            summary["errors"].append({"user": user.get("username"), "error": str(e)})
+
+    return summary

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from user import add_user, validate_username, user_exists, remove_user, set_max_connections, set_user_expiry
+from user import add_user, validate_username, user_exists, remove_user, set_max_connections, set_user_expiry, resurrect_users
 from utils import validate_and_format_fixed_date, calc_relative_expiry_date, clear_screen
 from live_monitor import live_monitor
 
@@ -13,6 +13,7 @@ def print_menu() -> None:
 3) Change user expiry
 4) Change user max connections
 5) Live monitor
+6) Resurrect users
 0) Exit (Ctrl-C at any point to exit)
 
 """)
@@ -145,6 +146,15 @@ def handle_change_max_connections() -> None:
 
     set_max_connections(username, max_connections)
 
+def handle_resurrect_users() -> None:
+    print("== Resurrect users ==")
+    summary = resurrect_users()
+    print("\nSummary:")
+    print(f"  created: {summary.get('created', [])}")
+    print(f"  updated: {summary.get('updated', [])}")
+    print(f"  errors : {summary.get('errors', [])}")
+    input("\nPress Enter to continue...")
+
 def main() -> None:
     try:
         clear_screen()
@@ -175,6 +185,8 @@ def main() -> None:
             handle_change_max_connections()
         elif choice == "5":
             live_monitor()
+        elif choice == "6":
+            handle_resurrect_users()
 
         print()
 
